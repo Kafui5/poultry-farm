@@ -34,4 +34,4 @@ services:
 databases:
   - name: poultry-db
     databaseName: poultry_farm
-    user: postgres
+    user: poultry_user
