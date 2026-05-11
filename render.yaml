@@ -18,18 +18,9 @@ services:
     env: docker
     dockerfilePath: ./poultry-farm/frontend/Dockerfile
     dockerContext: ./poultry-farm/frontend
-    dockerBuildArgs:
-      - key: VITE_API_URL
-        fromService:
-          name: poultry-backend
-          type: web
-          property: host
     envVars:
       - key: VITE_API_URL
-        fromService:
-          name: poultry-backend
-          type: web
-          property: host
+        sync: false
 
 databases:
   - name: poultry-db
