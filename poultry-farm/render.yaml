@@ -18,9 +18,18 @@ services:
     env: docker
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
+    dockerBuildArgs:
+      - key: VITE_API_URL
+        fromService:
+          name: poultry-backend
+          type: web
+          property: host
     envVars:
       - key: VITE_API_URL
-        value: https://poultry-backend.onrender.com
+        fromService:
+          name: poultry-backend
+          type: web
+          property: host
 
 databases:
   - name: poultry-db

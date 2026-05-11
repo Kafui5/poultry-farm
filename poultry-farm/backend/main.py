@@ -1,8 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from models import User, UserRole
-from auth import hash_password
+from auth import hash_password, get_current_user
 from sqlalchemy.orm import Session
 import models  # ensure all models are registered
 
@@ -41,3 +41,15 @@ def startup():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/seed")
+def seed_data(current_user: User = Depends(get_current_user)):
+    if current_user.role != UserRole.admin:
+        raise HTTPException(status_code=403, detail="Admin only")
+    from seed_gmgl import seed
+    db = Session(engine)
+    try:
+        return seed(db)
+    finally:
+        db.close()
